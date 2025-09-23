@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tech Puzzle Inauguration</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      position: relative;
+      background: linear-gradient(120deg, #0a0a0a, #050505, #0f0f0f);
+      background-size: 300% 300%;
+      animation: bgMove 15s ease infinite;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes bgMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Techy floating particles */
+    .particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0; left: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #00ffe7;
+      border-radius: 50%;
+      animation: float 10s linear infinite;
+      opacity: 0.5;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) scale(0.5);
+        opacity: 0;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-10vh) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    /* Puzzle Container */
+    .container {
+      background: rgba(20, 20, 20, 0.85);
+      padding: 40px;
+      border-radius: 15px;
+      text-align: center;
+      z-index: 2;
+      position: relative;
+      box-shadow: 0 0 30px #00ffff88;
+      border: 1px solid #00ffff33;
+      animation: fadeIn 2s ease-out, pulseGlow 4s infinite;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 30px #00ffff88; }
+      50% { box-shadow: 0 0 50px #00ffccbb; }
+    }
+
+    h2 {
+      color: #00ffe7;
+      margin-bottom: 20px;
+    }
+
+    #scrambled-word {
+      font-size: 2em;
+      color: #ff4081;
+      letter-spacing: 4px;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 18px;
+      width: 250px;
+      border: none;
+      border-radius: 5px;
+      margin-top: 15px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      margin-top: 20px;
+      background-color: #00ffc3;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #00cc9b;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #00ff88;
+    }
+
+    /* Ribbon animation */
+    .ribbon {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: linear-gradient(to right, red, white, red);
+      animation: slideRibbon 3s ease-in-out forwards;
+      z-index: 1;
+    }
+
+    .ribbon::before,
+    .ribbon::after {
+      content: "";
+      position: absolute;
+      top: -12px;
+      width: 24px;
+      height: 24px;
+      background: gold;
+      border-radius: 50%;
+    }
+
+    .ribbon::before {
+      left: -12px;
+    }
+
+    .ribbon::after {
+      right: -12px;
+    }
+
+    @keyframes slideRibbon {
+      0% { transform: scaleX(1); }
+      100% { transform: scaleX(0); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Ribbon -->
+  <div class="ribbon"></div>
+
+  <!-- Puzzle Container -->
+  <div class="container">
+    <h2>🚀 Welcome to the Inauguration</h2>
+    <p><strong>Unscramble this word:</strong></p>
+    <h1 id="scrambled-word">ntsuVehcnTr</h1>
+    <p>Hint: It's related to our new cell!</p>
+    <input type="text" id="user-input" placeholder="Your answer here">
+    <br>
+    <button onclick="checkAnswer()">Submit</button>
+    <div id="message"></div>
+  </div>
+
+  <script>
+    const correctAnswer = "TECHVENTURE";
+
+    function checkAnswer() {
+      const userAnswer = document.getElementById("user-input").value.toUpperCase().trim();
+      const messageDiv = document.getElementById("message");
+
+      if (userAnswer === correctAnswer) {
+        messageDiv.innerHTML = "✅ Correct!!! Wait a Second...";
+        setTimeout(() => {
+          window.location.href = "https://www.thepunedesignshow.com/";
+        }, 2000);
+      } else {
+        messageDiv.innerHTML = "❌ Oops! Sorry, try again.";
+      }
+    }
+
+    // Create floating particles
+    const particleContainer = document.getElementById("particles");
+    for (let i = 0; i < 50; i++) {
+      const particle = document.createElement("div");
+      particle.className = "particle";
+      particle.style.left = Math.random() * 100 + "vw";
+      particle.style.animationDelay = Math.random() * 10 + "s";
+      particle.style.opacity = Math.random();
+      particleContainer.appendChild(particle);
+    }
+  </script>
+
+</body>
+</html>
