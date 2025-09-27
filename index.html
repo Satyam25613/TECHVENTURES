@@ -1,224 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Tech Puzzle Inauguration</title>
-  <style>
-    /* Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8">
+<title>Tech Puzzle Inauguration</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{
+ height:100%;width:100%;overflow:hidden;
+ background:linear-gradient(120deg,#0a0a0a,#050505,#0f0f0f);
+ background-size:300% 300%;
+ animation:bgMove 15s ease infinite;
+ display:flex;align-items:center;justify-content:center;
+ color:#fff;position:relative;
+ font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+@keyframes bgMove{
+ 0%{background-position:0% 50%}
+ 50%{background-position:100% 50%}
+ 100%{background-position:0% 50%}
+}
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+/* star field */
+.particles{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0}
+.particle{
+ position:absolute;width:4px;height:4px;background:#00ffe7;
+ border-radius:50%;animation:float 10s linear infinite;opacity:.5
+}
+@keyframes float{
+ 0%{transform:translateY(100vh) scale(.5);opacity:0}
+ 50%{opacity:.8}
+ 100%{transform:translateY(-10vh) scale(1.2);opacity:0}
+}
 
-    body {
-      position: relative;
-      background: linear-gradient(120deg, #0a0a0a, #050505, #0f0f0f);
-      background-size: 300% 300%;
-      animation: bgMove 15s ease infinite;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+/* puzzle box */
+.container{
+ background:rgba(20,20,20,.85);
+ padding:40px;border-radius:15px;text-align:center;
+ z-index:2;position:relative;
+ box-shadow:0 0 30px #00ffff88;border:1px solid #00ffff33;
+ animation:fadeIn 2s ease-out,pulseGlow 4s infinite;
+ transition:opacity 1s ease, transform 1s ease;
+}
+.container.hide{opacity:0;transform:translateY(-30px);pointer-events:none}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)}}
+@keyframes pulseGlow{
+ 0%,100%{box-shadow:0 0 30px #00ffff88}
+ 50%{box-shadow:0 0 50px #00ffccbb}
+}
+h2{color:#00ffe7;margin-bottom:20px}
+#scrambled-word{font-size:2em;color:#ff4081;letter-spacing:4px}
+input{padding:10px;font-size:18px;width:250px;border:none;
+ border-radius:5px;margin-top:15px}
+button{
+ padding:10px 20px;font-size:18px;margin-top:20px;
+ background:#00ffc3;color:#000;border:none;border-radius:5px;cursor:pointer
+}
+button:hover{background:#00cc9b}
+#message{margin-top:20px;font-size:20px;color:#00ff88}
 
-    @keyframes bgMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+/* curved welcome text */
+.welcome-arc{
+ position:fixed;top:50%;left:50%;
+ transform:translate(-50%,-50%);
+ width:900px;height:650px;
+ opacity:0;z-index:3;
+ animation:welcomeFade 3s forwards;
+ pointer-events:none;
+}
+@keyframes welcomeFade{
+ 0%{opacity:0;transform:translate(-50%,-50%) scale(0.8)}
+ 50%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}
+ 100%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+}
+.welcome-arc text{
+ fill:#ffdf00;
+ font-family:'Bodoni MT',serif;
+ font-size:42px;
+ font-weight:bold;
+ text-shadow:
+    0 0 8px #ff8c00,
+    0 0 16px #ff8c00,
+    0 0 24px #ff8c00;
+}
 
-    /* Techy floating particles */
-    .particles {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0; left: 0;
-      z-index: 0;
-      overflow: hidden;
-    }
+/* letter-by-letter fade */
+.fade-letter{opacity:0;animation:fadeLetter 0.5s forwards}
+@keyframes fadeLetter{from{opacity:0}to{opacity:1}}
 
-    .particle {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: #00ffe7;
-      border-radius: 50%;
-      animation: float 10s linear infinite;
-      opacity: 0.5;
-    }
-
-    @keyframes float {
-      0% {
-        transform: translateY(100vh) scale(0.5);
-        opacity: 0;
-      }
-      50% {
-        opacity: 0.8;
-      }
-      100% {
-        transform: translateY(-10vh) scale(1.2);
-        opacity: 0;
-      }
-    }
-
-    /* Puzzle Container */
-    .container {
-      background: rgba(20, 20, 20, 0.85);
-      padding: 40px;
-      border-radius: 15px;
-      text-align: center;
-      z-index: 2;
-      position: relative;
-      box-shadow: 0 0 30px #00ffff88;
-      border: 1px solid #00ffff33;
-      animation: fadeIn 2s ease-out, pulseGlow 4s infinite;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 30px #00ffff88; }
-      50% { box-shadow: 0 0 50px #00ffccbb; }
-    }
-
-    h2 {
-      color: #00ffe7;
-      margin-bottom: 20px;
-    }
-
-    #scrambled-word {
-      font-size: 2em;
-      color: #ff4081;
-      letter-spacing: 4px;
-    }
-
-    input {
-      padding: 10px;
-      font-size: 18px;
-      width: 250px;
-      border: none;
-      border-radius: 5px;
-      margin-top: 15px;
-    }
-
-    button {
-      padding: 10px 20px;
-      font-size: 18px;
-      margin-top: 20px;
-      background-color: #00ffc3;
-      color: #000;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #00cc9b;
-    }
-
-    #message {
-      margin-top: 20px;
-      font-size: 20px;
-      color: #00ff88;
-    }
-
-    /* Ribbon animation */
-    .ribbon {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 8px;
-      background: linear-gradient(to right, red, white, red);
-      animation: slideRibbon 3s ease-in-out forwards;
-      z-index: 1;
-    }
-
-    .ribbon::before,
-    .ribbon::after {
-      content: "";
-      position: absolute;
-      top: -12px;
-      width: 24px;
-      height: 24px;
-      background: gold;
-      border-radius: 50%;
-    }
-
-    .ribbon::before {
-      left: -12px;
-    }
-
-    .ribbon::after {
-      right: -12px;
-    }
-
-    @keyframes slideRibbon {
-      0% { transform: scaleX(1); }
-      100% { transform: scaleX(0); opacity: 0; }
-    }
-  </style>
+/* fireworks */
+#fireworks{
+ position:fixed;top:0;left:0;width:100%;height:100%;
+ z-index:1;pointer-events:none;
+}
+</style>
 </head>
 <body>
+<div class="particles" id="particles"></div>
+<canvas id="fireworks"></canvas>
 
-  <!-- Background Particles -->
-  <div class="particles" id="particles"></div>
+<div class="container" id="puzzle-box">
+ <h2>🚀 Welcome to the Inauguration</h2>
+ <p><strong>Unscramble this word:</strong></p>
+ <h1 id="scrambled-word">ntsuVehcnTr</h1>
+ <p>Hint: It's related to our new cell!</p>
+ <input type="text" id="user-input" placeholder="Your answer here"><br>
+ <button onclick="checkAnswer()">Submit</button>
+ <div id="message"></div>
+</div>
 
-  <!-- Ribbon -->
-  <div class="ribbon"></div>
+<script>
+const correctAnswer = "TECHVENTURES";
+function checkAnswer(){
+ const val=document.getElementById("user-input").value.toUpperCase().trim();
+ const msg=document.getElementById("message");
+ if(val===correctAnswer){
+   msg.innerHTML="✅ Correct!!!";
+   document.getElementById("puzzle-box").classList.add("hide");
+   startFireworks();
+ }else{ msg.innerHTML="❌ Oops! Try again."; }
+}
 
-  <!-- Puzzle Container -->
-  <div class="container">
-    <h2>🚀 Welcome to the Inauguration</h2>
-    <p><strong>Unscramble this word:</strong></p>
-    <h1 id="scrambled-word">ntsuVehcnTr</h1>
-    <p>Hint: It's related to our new cell!</p>
-    <input type="text" id="user-input" placeholder="Your answer here">
-    <br>
-    <button onclick="checkAnswer()">Submit</button>
-    <div id="message"></div>
-  </div>
+function startFireworks(){
+ const canvas = document.getElementById("fireworks");
+ const ctx = canvas.getContext("2d");
+ let W = canvas.width = window.innerWidth;
+ let H = canvas.height = window.innerHeight;
+ window.addEventListener('resize',()=>{W = canvas.width = window.innerWidth;H = canvas.height = window.innerHeight;});
+ const fireworks=[],particles=[];
+ class Firework{
+   constructor(){
+     this.x=Math.random()*W; this.y=H;
+     this.targetY=Math.random()*H/2;
+     this.speed=4+Math.random()*2;
+     this.color=`hsl(${Math.random()*360},100%,60%)`;
+   }
+   update(){
+     this.y-=this.speed;
+     if(this.y<=this.targetY){
+       for(let i=0;i<80;i++) particles.push(new Particle(this.x,this.y,this.color));
+       return true;
+     } return false;
+   }
+   draw(){ctx.beginPath(); ctx.arc(this.x,this.y,2,0,Math.PI*2); ctx.fillStyle=this.color; ctx.fill();}
+ }
+ class Particle{
+   constructor(x,y,color){
+     this.x=x;this.y=y; this.color=color;
+     this.angle=Math.random()*2*Math.PI;
+     this.speed=Math.random()*6+2;
+     this.alpha=1; this.decay=0.02+Math.random()*0.02;
+   }
+   update(){
+     this.x+=Math.cos(this.angle)*this.speed;
+     this.y+=Math.sin(this.angle)*this.speed+0.3;
+     this.alpha-=this.decay; return this.alpha<=0;
+   }
+   draw(){
+     ctx.globalAlpha=this.alpha;
+     ctx.beginPath(); ctx.arc(this.x,this.y,2,0,Math.PI*2);
+     ctx.fillStyle=this.color; ctx.fill();
+     ctx.globalAlpha=1;
+   }
+ }
+ function animate(){
+   ctx.fillStyle="rgba(0,0,0,0.2)";
+   ctx.fillRect(0,0,W,H);
+   if(Math.random()<0.12) fireworks.push(new Firework());
+   for(let i=fireworks.length-1;i>=0;i--){
+     fireworks[i].draw();
+     if(fireworks[i].update()) fireworks.splice(i,1);
+   }
+   for(let i=particles.length-1;i>=0;i--){
+     particles[i].draw();
+     if(particles[i].update()) particles.splice(i,1);
+   }
+   requestAnimationFrame(animate);
+ }
+ animate();
 
-  <script>
-    const correctAnswer = "TECHVENTURE";
+ /* Arc text + subtitle after fireworks start */
+ setTimeout(()=>{
+   const svgNS = "http://www.w3.org/2000/svg";
+   const svg = document.createElementNS(svgNS,"svg");
+   svg.setAttribute("class","welcome-arc");
+   svg.setAttribute("viewBox","0 0 900 650");
 
-    function checkAnswer() {
-      const userAnswer = document.getElementById("user-input").value.toUpperCase().trim();
-      const messageDiv = document.getElementById("message");
+   const path = document.createElementNS(svgNS,"path");
+   path.setAttribute("id","arcPath");
+   path.setAttribute("d","M50,350 A400,300 0 0,1 850,350");
+   path.setAttribute("fill","transparent");
+   svg.appendChild(path);
 
-      if (userAnswer === correctAnswer) {
-        messageDiv.innerHTML = "✅ Correct!!! Wait a Second...";
-        setTimeout(() => {
-          window.location.href = "https://www.thepunedesignshow.com/";
-        }, 2000);
-      } else {
-        messageDiv.innerHTML = "❌ Oops! Sorry, try again.";
-      }
-    }
+   const text = document.createElementNS(svgNS,"text");
+   const message = "Welcome to our new TechVenture Inauguration!";
+   let offset = 0;
+   [...message].forEach((ch,i)=>{
+       const tp = document.createElementNS(svgNS,"textPath");
+       tp.setAttribute("href","#arcPath");
+       tp.setAttribute("startOffset", offset + "%");
+       tp.setAttribute("text-anchor","middle");
+       tp.setAttribute("class","fade-letter");
+       tp.style.animationDelay = (i*0.1) + "s";
+       tp.textContent = ch;
+       text.appendChild(tp);
+       offset += (100/message.length);
+   });
+   svg.appendChild(text);
 
-    // Create floating particles
-    const particleContainer = document.getElementById("particles");
-    for (let i = 0; i < 50; i++) {
-      const particle = document.createElement("div");
-      particle.className = "particle";
-      particle.style.left = Math.random() * 100 + "vw";
-      particle.style.animationDelay = Math.random() * 10 + "s";
-      particle.style.opacity = Math.random();
-      particleContainer.appendChild(particle);
-    }
-  </script>
+   const subtitle = document.createElementNS(svgNS,"text");
+   subtitle.setAttribute("x","450");
+   subtitle.setAttribute("y","430");
+   subtitle.setAttribute("text-anchor","middle");
+   subtitle.setAttribute("fill","#ffdf00");
+   subtitle.setAttribute("font-family","Bodoni MT, serif");
+   subtitle.setAttribute("font-size","40");
+   subtitle.setAttribute("font-weight","bold");
+   subtitle.style.textShadow =
+       "0 0 8px #ff8c00, 0 0 16px #ff8c00, 0 0 24px #ff8c00";
+   subtitle.textContent = "School of Computer Studies";
+   svg.appendChild(subtitle);
 
+   document.body.appendChild(svg);
+ },3000);
+}
+
+// background particles
+const particleContainer=document.getElementById("particles");
+for(let i=0;i<50;i++){
+ const p=document.createElement("div");
+ p.className="particle";
+ p.style.left=Math.random()*100+"vw";
+ p.style.animationDelay=Math.random()*10+"s";
+ p.style.opacity=Math.random();
+ particleContainer.appendChild(p);
+}
+</script>
 </body>
-
 </html>
