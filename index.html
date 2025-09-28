@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tech Puzzle Inauguration</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -21,7 +22,7 @@ html,body{
 }
 
 /* star field */
-.particles{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0}
+.particles{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;overflow:hidden}
 .particle{
  position:absolute;width:4px;height:4px;background:#00ffe7;
  border-radius:50%;animation:float 10s linear infinite;opacity:.5
@@ -35,11 +36,13 @@ html,body{
 /* puzzle box */
 .container{
  background:rgba(20,20,20,.85);
- padding:40px;border-radius:15px;text-align:center;
+ padding:clamp(20px,4vw,40px);
+ border-radius:15px;text-align:center;
  z-index:2;position:relative;
  box-shadow:0 0 30px #00ffff88;border:1px solid #00ffff33;
  animation:fadeIn 2s ease-out,pulseGlow 4s infinite;
  transition:opacity 1s ease, transform 1s ease;
+ width:90%;max-width:450px;
 }
 .container.hide{opacity:0;transform:translateY(-30px);pointer-events:none}
 @keyframes fadeIn{from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)}}
@@ -47,22 +50,30 @@ html,body{
  0%,100%{box-shadow:0 0 30px #00ffff88}
  50%{box-shadow:0 0 50px #00ffccbb}
 }
-h2{color:#00ffe7;margin-bottom:20px}
-#scrambled-word{font-size:2em;color:#ff4081;letter-spacing:4px}
-input{padding:10px;font-size:18px;width:250px;border:none;
- border-radius:5px;margin-top:15px}
+h2{color:#00ffe7;margin-bottom:clamp(10px,2vw,20px);font-size:clamp(1.2rem,4vw,2rem)}
+#scrambled-word{
+ font-size:clamp(1.5rem,6vw,2.5rem);
+ color:#ff4081;letter-spacing:4px;
+ word-wrap:break-word;
+}
+input{
+ padding:10px;font-size:clamp(1rem,4vw,1.2rem);
+ width:80%;max-width:250px;border:none;
+ border-radius:5px;margin-top:15px
+}
 button{
- padding:10px 20px;font-size:18px;margin-top:20px;
- background:#00ffc3;color:#000;border:none;border-radius:5px;cursor:pointer
+ padding:10px 20px;font-size:clamp(1rem,4vw,1.2rem);
+ margin-top:20px;background:#00ffc3;color:#000;
+ border:none;border-radius:5px;cursor:pointer
 }
 button:hover{background:#00cc9b}
-#message{margin-top:20px;font-size:20px;color:#00ff88}
+#message{margin-top:20px;font-size:clamp(1rem,4vw,1.25rem);color:#00ff88}
 
 /* curved welcome text */
 .welcome-arc{
  position:fixed;top:50%;left:50%;
  transform:translate(-50%,-50%);
- width:900px;height:650px;
+ width:90vw;height:65vh;
  opacity:0;z-index:3;
  animation:welcomeFade 3s forwards;
  pointer-events:none;
@@ -75,7 +86,7 @@ button:hover{background:#00cc9b}
 .welcome-arc text{
  fill:#ffdf00;
  font-family:'Bodoni MT',serif;
- font-size:42px;
+ font-size:clamp(1.2rem,5vw,2.5rem);
  font-weight:bold;
  text-shadow:
     0 0 8px #ff8c00,
@@ -125,7 +136,10 @@ function startFireworks(){
  const ctx = canvas.getContext("2d");
  let W = canvas.width = window.innerWidth;
  let H = canvas.height = window.innerHeight;
- window.addEventListener('resize',()=>{W = canvas.width = window.innerWidth;H = canvas.height = window.innerHeight;});
+ window.addEventListener('resize',()=>{
+   W = canvas.width = window.innerWidth;
+   H = canvas.height = window.innerHeight;
+ });
  const fireworks=[],particles=[];
  class Firework{
    constructor(){
@@ -137,7 +151,7 @@ function startFireworks(){
    update(){
      this.y-=this.speed;
      if(this.y<=this.targetY){
-       for(let i=0;i<80;i++) particles.push(new Particle(this.x,this.y,this.color));
+       for(let i=0;i<60;i++) particles.push(new Particle(this.x,this.y,this.color));
        return true;
      } return false;
    }
@@ -178,7 +192,6 @@ function startFireworks(){
  }
  animate();
 
- /* Arc text + subtitle after fireworks start */
  setTimeout(()=>{
    const svgNS = "http://www.w3.org/2000/svg";
    const svg = document.createElementNS(svgNS,"svg");
@@ -213,7 +226,7 @@ function startFireworks(){
    subtitle.setAttribute("text-anchor","middle");
    subtitle.setAttribute("fill","#ffdf00");
    subtitle.setAttribute("font-family","Bodoni MT, serif");
-   subtitle.setAttribute("font-size","40");
+   subtitle.setAttribute("font-size","clamp(1.2rem,5vw,2.5rem)");
    subtitle.setAttribute("font-weight","bold");
    subtitle.style.textShadow =
        "0 0 8px #ff8c00, 0 0 16px #ff8c00, 0 0 24px #ff8c00";
@@ -226,7 +239,7 @@ function startFireworks(){
 
 // background particles
 const particleContainer=document.getElementById("particles");
-for(let i=0;i<50;i++){
+for(let i=0;i<40;i++){
  const p=document.createElement("div");
  p.className="particle";
  p.style.left=Math.random()*100+"vw";
