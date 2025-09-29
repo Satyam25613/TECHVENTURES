@@ -14,6 +14,7 @@ html,body{
  display:flex;align-items:center;justify-content:center;
  color:#fff;position:relative;
  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+ text-align:center;
 }
 @keyframes bgMove{
  0%{background-position:0% 50%}
@@ -69,34 +70,39 @@ button{
 button:hover{background:#00cc9b}
 #message{margin-top:20px;font-size:clamp(1rem,4vw,1.25rem);color:#00ff88}
 
-/* curved welcome text */
-.welcome-arc{
+/* big welcome text */
+.big-welcome{
  position:fixed;top:50%;left:50%;
  transform:translate(-50%,-50%);
- width:90vw;height:65vh;
- opacity:0;z-index:3;
- animation:welcomeFade 3s forwards;
+ text-align:center;
+ color:#ffdf00;
+ z-index:3;
+ opacity:0;
  pointer-events:none;
 }
-@keyframes welcomeFade{
- 0%{opacity:0;transform:translate(-50%,-50%) scale(0.8)}
- 50%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}
- 100%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.big-welcome.show{
+ /* ⏱ animation slowed from 2s to 4s */
+ animation:zoomFade 4s forwards;
 }
-.welcome-arc text{
- fill:#ffdf00;
- font-family:'Bodoni MT',serif;
- font-size:clamp(1.2rem,5vw,2.5rem);
- font-weight:bold;
+.big-welcome h1{
+ font-size:clamp(2rem,8vw,4rem);
+ margin-bottom:clamp(20px,4vw,40px); /* space after first line */
+}
+.big-welcome h2{
+ font-size:clamp(1.5rem,6vw,3rem);
+ line-height:1.4;
+}
+@keyframes zoomFade{
+ 0%{opacity:0;transform:translate(-50%,-50%) scale(0.5);}
+ 60%{opacity:1;transform:translate(-50%,-50%) scale(1.1);}
+ 100%{opacity:1;transform:translate(-50%,-50%) scale(1);}
+}
+.big-welcome h1,.big-welcome h2{
  text-shadow:
     0 0 8px #ff8c00,
     0 0 16px #ff8c00,
     0 0 24px #ff8c00;
 }
-
-/* letter-by-letter fade */
-.fade-letter{opacity:0;animation:fadeLetter 0.5s forwards}
-@keyframes fadeLetter{from{opacity:0}to{opacity:1}}
 
 /* fireworks */
 #fireworks{
@@ -119,6 +125,12 @@ button:hover{background:#00cc9b}
  <div id="message"></div>
 </div>
 
+<!-- Big Welcome Message (hidden until puzzle solved) -->
+<div class="big-welcome" id="big-welcome">
+ <h1>School of Computer Studies</h1>
+ <h2>Welcomes you to the <br>Techventures Inauguration Ceremony</h2>
+</div>
+
 <script>
 const correctAnswer = "TECHVENTURES";
 function checkAnswer(){
@@ -128,6 +140,8 @@ function checkAnswer(){
    msg.innerHTML="✅ Correct!!!";
    document.getElementById("puzzle-box").classList.add("hide");
    startFireworks();
+   // ⏱ longer delay (from 1s to 2.5s) before welcome text starts
+   setTimeout(()=>document.getElementById("big-welcome").classList.add("show"),2500);
  }else{ msg.innerHTML="❌ Oops! Try again."; }
 }
 
@@ -191,50 +205,6 @@ function startFireworks(){
    requestAnimationFrame(animate);
  }
  animate();
-
- setTimeout(()=>{
-   const svgNS = "http://www.w3.org/2000/svg";
-   const svg = document.createElementNS(svgNS,"svg");
-   svg.setAttribute("class","welcome-arc");
-   svg.setAttribute("viewBox","0 0 900 650");
-
-   const path = document.createElementNS(svgNS,"path");
-   path.setAttribute("id","arcPath");
-   path.setAttribute("d","M50,350 A400,300 0 0,1 850,350");
-   path.setAttribute("fill","transparent");
-   svg.appendChild(path);
-
-   const text = document.createElementNS(svgNS,"text");
-   const message = "Welcome to our new TechVenture Inauguration!";
-   let offset = 0;
-   [...message].forEach((ch,i)=>{
-       const tp = document.createElementNS(svgNS,"textPath");
-       tp.setAttribute("href","#arcPath");
-       tp.setAttribute("startOffset", offset + "%");
-       tp.setAttribute("text-anchor","middle");
-       tp.setAttribute("class","fade-letter");
-       tp.style.animationDelay = (i*0.1) + "s";
-       tp.textContent = ch;
-       text.appendChild(tp);
-       offset += (100/message.length);
-   });
-   svg.appendChild(text);
-
-   const subtitle = document.createElementNS(svgNS,"text");
-   subtitle.setAttribute("x","450");
-   subtitle.setAttribute("y","430");
-   subtitle.setAttribute("text-anchor","middle");
-   subtitle.setAttribute("fill","#ffdf00");
-   subtitle.setAttribute("font-family","Bodoni MT, serif");
-   subtitle.setAttribute("font-size","clamp(1.2rem,5vw,2.5rem)");
-   subtitle.setAttribute("font-weight","bold");
-   subtitle.style.textShadow =
-       "0 0 8px #ff8c00, 0 0 16px #ff8c00, 0 0 24px #ff8c00";
-   subtitle.textContent = "School of Computer Studies";
-   svg.appendChild(subtitle);
-
-   document.body.appendChild(svg);
- },3000);
 }
 
 // background particles
